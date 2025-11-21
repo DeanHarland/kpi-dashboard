@@ -292,33 +292,19 @@ function updateProgressBars() {
 
   // --- Actual Progress ---
   const actualPercent = Math.round((completedDays / totalDays) * 100);
-
   const actualBar = document.getElementById("actualProgressBar");
   actualBar.style.width = `${actualPercent}%`;
   actualBar.textContent = `${actualPercent}%`;
 
-  // --- Expected Progress ---
+  // --- Expected Progress (based on KPI days) ---
   const today = new Date();
-  
-  // Convert our DD-MM-YYYY keys into real dates
-  const parsedDates = allDates.map(d => {
+  let expectedDaysElapsed = allDates.filter(d => {
     const [day, month, year] = d.split('-').map(Number);
-    return new Date(year, month - 1, day);
-  }).sort((a, b) => a - b);
+    const dateObj = new Date(year, month - 1, day);
+    return dateObj <= today;
+  }).length;
 
-  const firstDay = parsedDates[0];
-  const lastDay = parsedDates[parsedDates.length - 1];
-
-  let expectedPercent = 0;
-
-  if (today >= firstDay && today <= lastDay) {
-    const totalMs = lastDay - firstDay;
-    const elapsedMs = today - firstDay;
-    expectedPercent = Math.round((elapsedMs / totalMs) * 100);
-  } else if (today > lastDay) {
-    expectedPercent = 100;
-  }
-
+  const expectedPercent = Math.round((expectedDaysElapsed / totalDays) * 100);
   const expectedBar = document.getElementById("expectedProgressBar");
   expectedBar.style.width = `${expectedPercent}%`;
   expectedBar.textContent = `${expectedPercent}%`;
