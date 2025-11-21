@@ -14,6 +14,15 @@
       border-top: 2px solid #e0e0e0;
       padding-top: 12px;
     }
+    .progress {
+        height: 28px !important;
+        border-radius: 10px;
+    }
+
+    .progress-bar {
+        font-size: 1rem;
+        font-weight: 600;
+    }
     
 
   </style>
@@ -27,6 +36,26 @@
     <!-- KPI content dynamically inserted here -->
   </div>
 </div>
+<div class="card mb-5 shadow">
+  <div class="card-header bg-light fw-bold fs-4 py-3">
+    Progress Overview
+  </div>
+
+  <div class="card-body">
+
+    <p class="mb-1 fw-bold">Your Progress</p>
+    <div class="progress mb-4" style="height: 28px;">
+      <div id="actualProgressBar" class="progress-bar bg-success" style="width: 0%">0%</div>
+    </div>
+
+    <p class="mb-1 fw-bold">Expected Progress</p>
+    <div class="progress" style="height: 28px;">
+      <div id="expectedProgressBar" class="progress-bar bg-warning text-dark" style="width: 0%">0%</div>
+    </div>
+
+  </div>
+</div>
+
 
     <h2 class="mb-3">Daily KPI List</h2>
     <ul id="kpiList" class="list-group">

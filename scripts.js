@@ -209,6 +209,7 @@ return dateObj.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', m
 }
 
 
+
 function loadToday() {
 const today = new Date();
 const todayStr = today.toISOString().split("T")[0].split('-').reverse().join('-');
@@ -265,6 +266,7 @@ function loadKpiList() {
     // Make whole row toggle completion
     item.addEventListener("click", () => {
       item.classList.toggle("completed");
+      updateProgressBars();
 
       if (item.classList.contains("completed")) {
         completedDates.push(date);
@@ -281,8 +283,48 @@ function loadKpiList() {
     list.appendChild(item);
   });
 }
+function updateProgressBars() {
+  const allDates = Object.keys(sessionData);
+  const completedDates = loadCompletedState();
 
+  const totalDays = allDates.length;
+  const completedDays = completedDates.length;
+
+  // --- Actual Progress ---
+  const actualPercent = Math.round((completedDays / totalDays) * 100);
+
+  const actualBar = document.getElementById("actualProgressBar");
+  actualBar.style.width = `${actualPercent}%`;
+  actualBar.textContent = `${actualPercent}%`;
+
+  // --- Expected Progress ---
+  const today = new Date();
+  
+  // Convert our DD-MM-YYYY keys into real dates
+  const parsedDates = allDates.map(d => {
+    const [day, month, year] = d.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  }).sort((a, b) => a - b);
+
+  const firstDay = parsedDates[0];
+  const lastDay = parsedDates[parsedDates.length - 1];
+
+  let expectedPercent = 0;
+
+  if (today >= firstDay && today <= lastDay) {
+    const totalMs = lastDay - firstDay;
+    const elapsedMs = today - firstDay;
+    expectedPercent = Math.round((elapsedMs / totalMs) * 100);
+  } else if (today > lastDay) {
+    expectedPercent = 100;
+  }
+
+  const expectedBar = document.getElementById("expectedProgressBar");
+  expectedBar.style.width = `${expectedPercent}%`;
+  expectedBar.textContent = `${expectedPercent}%`;
+}
 
 
 loadToday();
 loadKpiList();
+updateProgressBars();
