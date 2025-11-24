@@ -223,7 +223,7 @@ todayBox.innerHTML = `
 <div class='text-center flex-grow-1'>${sessionData[todayStr]}</div>
 </div>`;
 } else {
-todayBox.innerHTML = `<p>No KPI data for today.</p>`;
+todayBox.innerHTML = `<p>It's a Weekend, go touch some grass!</p>`;
 }
 }
 
